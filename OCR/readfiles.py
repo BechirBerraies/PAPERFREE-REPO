@@ -10,10 +10,17 @@ from bidi.algorithm import get_display
 
 Carte = "images/nour.jpg"
 
+
+
+
+
+
 display(Carte)
 ocr_result = pytesseract.image_to_string(Image.open(Carte), lang='ara')
 reshaped_text = arabic_reshaper.reshape(ocr_result)
 bidi_text = get_display(reshaped_text)
 print(bidi_text)
+
+
 
 
