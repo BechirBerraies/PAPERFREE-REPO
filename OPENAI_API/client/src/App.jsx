@@ -37,9 +37,10 @@ function App() {
       if (response.data.success) {
         console.log('Image uploaded successfully!');
         setImagePath(response.data.imagePath);
+        console.log(response.data.imagePath);
         setSelectedFile(null);
       } else {
-        console.error('Error uploading image:', response.data.error);
+        console.error('Error uploading image:', response.data);
         alert('Error uploading image. Please try again.');
       }
     } catch (error) {

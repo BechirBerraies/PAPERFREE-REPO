@@ -36,10 +36,37 @@ app.post('/upload', upload.single('file'), (req, res) => {
         return res.status(400).json({ success: false, error: 'No file uploaded' });
     }
     const imagePath = req.file.path;
+    
     console.log("🐱‍👤🐱‍👤🐱‍👤🐱‍👤🐱‍👤🐱‍👤🐱‍👤🐱‍👤🐱‍👤"+imagePath);
-    res.json({ success: true, imagePath: `http://localhost:${PORT}/${imagePath}` });
-    console.log("🐱‍👤🐱‍👤🐱‍👤🐱‍👤🐱‍👤🐱‍👤🐱‍👤🐱‍👤🐱‍👤"+imagePath);
+    talkToPython(imagePath, res)
 });
+
+function talkToPython(imagePath, res) {
+    const pythonProcess = spawn('python', ['./ocr.py', imagePath], {
+        env: { ...process.env, PYTHONIOENCODING: 'utf-8' }
+    });
+  
+    let scriptOutput = '';
+
+    pythonProcess.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`);
+        scriptOutput += data.toString();
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+        console.error(`Error from Python script: ${data}`);
+    });
+
+    pythonProcess.on('close', (code) => {
+        console.log(`Python process closed with code ${code}`);
+        if (code === 0) {
+            console.log("this is the response PATH " + imagePath);
+            res.send({success: true,imagePath,scriptOutput});
+        } else {
+            res.status(500).send(`Python script exited with code ${code}`);
+        }
+    });
+}
 
 app.post('/askchatgpt', async (req, res) => {
     try {
