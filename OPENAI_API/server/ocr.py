@@ -5,6 +5,7 @@ from bidi.algorithm import get_display
 import sys
 import os
 
+
 # Set the default encoding to UTF-8
 sys.stdout.reconfigure(encoding='utf-8')
 sys.stderr.reconfigure(encoding='utf-8')

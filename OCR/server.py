@@ -1,14 +1,15 @@
 import cv2 
 from PIL import Image
 from matplotlib import pyplot as plt
+import os
 
 
 
-image_file = "images/nour.jpg"
+
+image_file = "C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\images\\nour.jpg"
 img = cv2.imread(image_file)
 
 def display(im_path):
-
     dpi = 80
     im_data = plt.imread(im_path)
     if len(im_data.shape) == 3:
@@ -40,23 +41,23 @@ display(image_file)
 
 # INVERT THE IMAGE 
 inverted_image = cv2.bitwise_not(img)
-cv2.imwrite("tempo/invertedimage.jpg", inverted_image)
-display("tempo/invertedimage.jpg")
+cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\invertedimage.jpg", inverted_image)
+display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\invertedimage.jpg")
 
 #BINARISATION 
 def grayscale(image):
     return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY )
 
 gray_image = grayscale(img)
-cv2.imwrite("OCR-Python/tempo/grayedimage.jpg",gray_image)
+cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\grayedimage.jpg",gray_image)
 
-# display("OCR-Python/tempo/grayedimage.jpg")
+display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\grayedimage.jpg")
 
 thresh, im_bw = cv2.threshold(gray_image, 195 ,  230 , cv2.THRESH_BINARY)
-cv2.imwrite("OCR-Python/tempo/bw-image.jpg",im_bw )
+cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\im_bw.jpg",im_bw )
 
 
-# display("OCR-Python/tempo/bw-image.jpg")
+display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\im_bw.jpg")
 
 
 
@@ -73,9 +74,9 @@ def noiseRemoval(image):
 
 
 no_noise = noiseRemoval(im_bw)
-cv2.imwrite("OCR-Python/tempo/nonoise-image.jpg", no_noise)
+cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\no_noise.jpg", no_noise)
 
-# display("OCR-Python/tempo/nonoise-image.jpg")
+display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\no_noise.jpg")
 
 
 #Dilation and Erosion 
@@ -106,14 +107,14 @@ cv2.imwrite("OCR-Python/tempo/dialated_image.jpg",dialated_image)
 
 
 
-erroded_image = thin_font(no_noise)
-cv2.imwrite("OCR-Python/tempo/erroded_image.jpg",erroded_image)
-# display("OCR-Python/tempo/erroded_image.jpg")
+# erroded_image = thin_font(no_noise)
+# cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\erroded_image.jpg",erroded_image)
+# display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\erroded_image.jpg")
 
 # Rotation or diskewing 
 
 
-new = cv2.imread("OCR-Python/images/page_01_rotated.JPG")
+# new = cv2.imread("OCR-Python/images/page_01_rotated.JPG")
 # display("OCR-Python/images/page_01_rotated.JPG")
 
 
@@ -161,13 +162,13 @@ def rotateImage(cvImage, angle: float):
 
 
 # Deskew image
-# def deskew(cvImage):
-#     angle = getSkewAngle(cvImage)
-#     return rotateImage(cvImage, -1.0 * angle)
+# def deskew(no_noise):
+#     angle = getSkewAngle(no_noise)
+#     return rotateImage(no_noise, -1.0 * angle)
 
-# fixed = deskew(new)
-# cv2.imwrite("OCR-Python/tempo/rotated_fixed.jpg", fixed)
-# display("OCR-Python/tempo/rotated_fixed.jpg")
+# fixed = deskew(no_noise)
+# cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\fixed_rotation.jpg", fixed)
+# display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\fixed_rotation.jpg")
 
 
 
@@ -186,8 +187,8 @@ def remove_borders(image):
     return (crop)
 
 no_borders = remove_borders(no_noise)
-cv2.imwrite("OCR-Python/tempo/no_borders.jpg", no_borders)
-# display('OCR-Python/tempo/no_borders.jpg')
+cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\no_borders.jpg", no_borders)
+display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\no_borders.jpg")
 
 
 
@@ -196,11 +197,10 @@ cv2.imwrite("OCR-Python/tempo/no_borders.jpg", no_borders)
 color = [255, 255, 255]
 top, bottom, left, right = [150]*4
 image_with_border = cv2.copyMakeBorder(no_borders, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)
-cv2.imwrite("OCR-Python/tempo/image_with_border.jpg", image_with_border)
-# display("OCR-Python/tempo/image_with_border.jpg")
+cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\image_with_borders.jpg", image_with_border)
+display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\image_with_borders.jpg")
 
 
-## Pytesseract
 
 
 
