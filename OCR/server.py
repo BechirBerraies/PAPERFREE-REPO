@@ -2,62 +2,89 @@ import cv2
 from PIL import Image
 from matplotlib import pyplot as plt
 import os
-
+import numpy as np
+from methods import display
 
 
 
 image_file = "C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\images\\nour.jpg"
 img = cv2.imread(image_file)
 
-def display(im_path):
-    dpi = 80
-    im_data = plt.imread(im_path)
-    if len(im_data.shape) == 3:
-        height, width, depth = im_data.shape
-    else:
-        height, width = im_data.shape
-        depth = 1  # Grayscale images have a single channel
 
-    # What size does the figure need to be in inches to fit the image?
-    figsize = width / float(dpi), height / float(dpi)
-
-    # Create a figure of the right size with one axes that takes up the full figure
-    fig = plt.figure(figsize=figsize)
-    ax = fig.add_axes([0, 0, 1, 1])
-
-    # Hide spines, ticks, etc.
-    ax.axis('off')
-
-    # Display the image.
-    ax.imshow(im_data, cmap='gray')
-
-    plt.show()
-
-
+# print("OpenCV version:", cv2.__version__)
 
 
 display(image_file)
 
 
-# INVERT THE IMAGE 
+# 1 INVERT THE IMAGE 
 inverted_image = cv2.bitwise_not(img)
 cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\invertedimage.jpg", inverted_image)
-display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\invertedimage.jpg")
+# display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\invertedimage.jpg")
 
-#BINARISATION 
+# 2 BINARISATION 
 def grayscale(image):
     return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY )
 
 gray_image = grayscale(img)
 cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\grayedimage.jpg",gray_image)
 
-display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\grayedimage.jpg")
+# display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\grayedimage.jpg")
 
-thresh, im_bw = cv2.threshold(gray_image, 195 ,  230 , cv2.THRESH_BINARY)
+# Blurr 
+
+blur = cv2.GaussianBlur(gray_image,(7,7),0)
+cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\blur.jpg", blur)
+# display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\blur.jpg")
+
+
+# THRESH
+
+thresh = cv2.threshold(blur,0,255,cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\tresh.jpg",thresh )
+# display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\tresh.jpg")
+
+# KERNAL 
+
+kernal = cv2.getStructuringElement(cv2.MORPH_RECT,(3,13))
+cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\index_kernal.jpg",kernal)
+
+dilate = cv2.dilate(thresh,kernal, iterations=1  )
+cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\index_dilate.jpg", dilate)
+
+# display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\index_dilate.jpg")
+
+
+# CONTOURS 
+
+
+contours, _ = cv2.findContours(dilate , cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+min_contour_area = 500
+contours = [c for c in contours if cv2.contourArea(c) > min_contour_area]
+
+
+contours = sorted(contours, key=lambda x: cv2.boundingRect(x)[0])
+
+for c in contours : 
+    x,y,w,h = cv2.boundingRect(c)
+    aspect_ratio = w / float(h)
+    if aspect_ratio < 0.5 or aspect_ratio > 2:
+        continue
+    
+    cv2.rectangle(thresh,(x,y),(x+w , y+h),(36,255,12),2)
+cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\image_boxes.jpg", thresh)
+display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\image_boxes.jpg")
+
+
+
+# IM_BW
+
+thresh, im_bw = cv2.threshold(gray_image, 150 ,  230 , cv2.THRESH_BINARY)
 cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\im_bw.jpg",im_bw )
 
 
-display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\im_bw.jpg")
+
+# display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\im_bw.jpg")
 
 
 
@@ -76,7 +103,7 @@ def noiseRemoval(image):
 no_noise = noiseRemoval(im_bw)
 cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\no_noise.jpg", no_noise)
 
-display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\no_noise.jpg")
+# display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\no_noise.jpg")
 
 
 #Dilation and Erosion 
@@ -188,7 +215,7 @@ def remove_borders(image):
 
 no_borders = remove_borders(no_noise)
 cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\no_borders.jpg", no_borders)
-display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\no_borders.jpg")
+# display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\no_borders.jpg")
 
 
 
@@ -198,7 +225,7 @@ color = [255, 255, 255]
 top, bottom, left, right = [150]*4
 image_with_border = cv2.copyMakeBorder(no_borders, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)
 cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\image_with_borders.jpg", image_with_border)
-display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\image_with_borders.jpg")
+# display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\image_with_borders.jpg")
 
 
 

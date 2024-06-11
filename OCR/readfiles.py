@@ -1,14 +1,17 @@
 from PIL import Image
 import pytesseract
 import cv2 
-# from server import display
+from methods import display
 from matplotlib import pyplot as plt
 import arabic_reshaper
 from bidi.algorithm import get_display
 
 
 
-Carte = "C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\image_with_borders.jpg"
+
+Carte = "C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\images\\nour.jpg"
+
+
 
 
 
