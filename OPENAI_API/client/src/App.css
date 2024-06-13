@@ -1,0 +1,6 @@
+.arabic-text {
+    direction: rtl;
+    text-align: right;
+    font-family: 'Arial', sans-serif; /* Ensure your font supports Arabic characters */
+    
+  }

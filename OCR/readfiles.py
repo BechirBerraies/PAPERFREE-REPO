@@ -9,7 +9,7 @@ from bidi.algorithm import get_display
 
 
 
-Carte = "C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\images\\nour.jpg"
+Carte = "C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\no_noise.jpg"
 
 
 

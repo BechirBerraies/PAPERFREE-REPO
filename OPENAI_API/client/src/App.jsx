@@ -5,6 +5,7 @@ import axios from 'axios';
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePath, setImagePath] = useState(null);
+  const [arabicText,setArabicText]= useState()
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -38,6 +39,8 @@ function App() {
         console.log('Image uploaded successfully!');
         setImagePath(response.data.imagePath);
         console.log(response.data.imagePath);
+        console.log(response.data);
+        setArabicText(response.data.scriptOutput)
         setSelectedFile(null);
       } else {
         console.error('Error uploading image:', response.data);
@@ -51,7 +54,7 @@ function App() {
 
   const sendRequestToChatGPT = async (e) => {
     e.preventDefault();
-    if (!imagePath) {
+    if (!arabicText) {
       alert('Please upload an image first.');
       return;
     }
@@ -61,7 +64,7 @@ function App() {
         name: document.getElementById('name').value,
         surname: document.getElementById('surname').value,
         id: document.getElementById('id').value,
-        imagePath,
+        arabicText: arabicText,
       });
       console.log(response.data);
     } catch (error) {
@@ -72,6 +75,7 @@ function App() {
   return (
     <div className="h-screen w-screen bg-cover bg-center" style={{ backgroundImage: `url('../public/images/header.png')` }}>
       <div className="image-upload-container h-full flex items-center align-middle justify-center">
+      <h1 className='arabic-text'>{arabicText}</h1>
         <form onSubmit={sendRequestToChatGPT} className="max-w-sm mx-auto">
           <div className="mb-5">
             <input
@@ -126,7 +130,6 @@ function App() {
             </button>
           </div>
         </form>
-        {imagePath && <img src={imagePath} alt="Uploaded Image" />}
       </div>
     </div>
   );

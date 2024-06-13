@@ -6,7 +6,6 @@ import numpy as np
 from methods import display
 
 
-
 image_file = "C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\images\\nour.jpg"
 img = cv2.imread(image_file)
 
@@ -65,14 +64,17 @@ contours = [c for c in contours if cv2.contourArea(c) > min_contour_area]
 
 contours = sorted(contours, key=lambda x: cv2.boundingRect(x)[0])
 
-for c in contours : 
-    x,y,w,h = cv2.boundingRect(c)
-    aspect_ratio = w / float(h)
-    if aspect_ratio < 0.5 or aspect_ratio > 2:
-        continue
-    
-    cv2.rectangle(thresh,(x,y),(x+w , y+h),(36,255,12),2)
-cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\image_boxes.jpg", thresh)
+results  = []
+for c in contours:
+    x, y, w, h = cv2.boundingRect(c)
+    if h > 200 and w > 20:
+        roi = gray_image[y:y+h, x:x+h]
+        cv2.rectangle(gray_image, (x, y), (x+w, y+h), (36, 255, 12), 2)
+        ocr_result = pytesseract.image_to_string(roi)
+        ocr_result = ocr_result.split("\n")
+        for item in ocr_result:
+            results.append(item)
+cv2.imwrite("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\image_boxes.jpg", gray_image)
 display("C:\\Users\\Lenovo\\Desktop\\Code\\PAPERFREE-REPO\\OCR\\tempo\\image_boxes.jpg")
 
 
