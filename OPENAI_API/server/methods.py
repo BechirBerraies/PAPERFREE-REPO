@@ -60,18 +60,21 @@ def preprocess_image(image_path):
     display(gray_path)
 
 
-    # 3 BLURR IMAGE
-    blur = cv2.GaussianBlur(gray_image,(7,7),0)
-    blur_path = "temp/blurimage.png"
-    cv2.imwrite(blur_path,blur)
-    display(blur_path)
+    # # 3 BLURR IMAGE
+    # blur = cv2.GaussianBlur(gray_image,(7,7),0)
+    # blur_path = "temp/blurimage.png"
+    # cv2.imwrite(blur_path,blur)
+    # display(blur_path)
 
     # 4 THRESH 
 
-    thresh = cv2.threshold(blur,0,255,cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
-    tresh_path =  "temp/tresh.png"
-    cv2.imwrite(tresh_path,thresh)
-    display(tresh_path)
+    
+    _, thresh = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+
+    # thresh = cv2.threshold(gray_path,0,255,cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+    # tresh_path =  "temp/tresh.png"
+    # cv2.imwrite(tresh_path,thresh)
+    # display(tresh_path)
 
     # NOISE REMOVAL 
     def noiseRemoval(image):
@@ -91,7 +94,31 @@ def preprocess_image(image_path):
 
 
 
-    return gray_path
+    # Deskewing and Rotation Correction
+    def deskew(image):
+        coords = np.column_stack(np.where(image > 0))
+        angle = cv2.minAreaRect(coords)[-1]
+        if angle < -45:
+            angle = -(90 + angle)
+        else:
+            angle = -angle
+        (h, w) = image.shape[:2]
+        center = (w // 2, h // 2)
+        M = cv2.getRotationMatrix2D(center, angle, 1.0)
+        rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+        return rotated
+    
+    deskewed_image = deskew(no_noise)
+
+    # Save the processed image
+    processed_image_path = "temp/processed_image.png"
+    cv2.imwrite(processed_image_path, deskewed_image)
+
+    return no_noisepath
+
+
+
+
 
 
 
