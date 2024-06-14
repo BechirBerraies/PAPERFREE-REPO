@@ -60,7 +60,7 @@ function App() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8000/askchatgpt', {
+      const response = await axios.post('http://localhost:8000/openaiIdCard', {
         name: document.getElementById('name').value,
         surname: document.getElementById('surname').value,
         id: document.getElementById('id').value,
