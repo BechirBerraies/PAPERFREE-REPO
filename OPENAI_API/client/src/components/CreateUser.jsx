@@ -45,6 +45,7 @@ const CreateUser = () => {
         axios.post('http://localhost:8000/Student/login', loguser, { withCredentials: true })
            .then(serverResponse => {
                 console.log(serverResponse);
+                
                 navigate('/process');
             })
            .catch(error => console.log(error),

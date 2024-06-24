@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const { CardIdSchema } = require('./CardId.model')
 
 StudentSchema = new mongoose.Schema({
    
@@ -22,9 +22,10 @@ StudentSchema = new mongoose.Schema({
         type:String,
         required:[true,"Password very required"],
         minlength:[6,"PAssword too short👌"]
-    }
+    },
 
-
+    card : [CardIdSchema]
+    
 },{ timestamps: true });
 
 

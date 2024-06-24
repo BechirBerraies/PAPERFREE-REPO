@@ -1,11 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Nav from './Nav';
 
+
 function Process() {
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePath, setImagePath] = useState(null);
   const [arabicText,setArabicText]= useState()
+  const [formData, setFormData] = useState({
+    name: "",
+    surname: "",
+    id: "",
+    birthDate: ""
+  });
+
+
+
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -67,23 +78,53 @@ function Process() {
         arabicText: arabicText,
       });
       console.log(response.data);
+      await CreateCard();
     } catch (error) {
       console.error('Error making the Chat GPT request:', error);
     }
   };
 
+
+
+
+  const CreateCard = async () => {
+    try {
+      const cardData = {
+        Name: formData.name,
+        Surname: formData.surname,
+        CardNumber: formData.id,
+        BirthDate: formData.birthDate,
+        path: imagePath,
+      };
+      const response = await axios.post("http://localhost:8000/createCard", cardData);
+      console.log(response);
+      alert("Successful submission");
+    } catch (error) {
+      console.error('Error creating card:', error);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [id]: value,
+    }));
+  };
+
+
   return (
-    
     <div className="h-screen w-screen bg-cover bg-center" style={{ backgroundImage: `url('../public/images/header.png')` }}>
       <Nav/>
       <div className="image-upload-container h-full flex items-center align-middle justify-center">
-      <h1 className='arabic-text'>{arabicText}</h1>
         <form onSubmit={sendRequestToChatGPT} className="max-w-sm mx-auto">
           <div className="mb-5">
             <input
               placeholder="Name"
               type="text"
               id="name"
+              value={formData.name}
+              onChange={handleInputChange}
               className="bg-custom-dark border border-custom-border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-center"
               required
             />
@@ -93,6 +134,8 @@ function Process() {
               placeholder="Surname"
               type="text"
               id="surname"
+              value={formData.surname}
+              onChange={handleInputChange}
               className="bg-custom-dark border border-custom-border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-center"
               required
             />
@@ -102,6 +145,19 @@ function Process() {
               placeholder="Id Number"
               type="text"
               id="id"
+              value={formData.id}
+              onChange={handleInputChange}
+              className="bg-custom-dark border border-custom-border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-center"
+              required
+            />
+          </div>
+          <div className="mb-5">
+            <input
+              placeholder="Birthdate"
+              type="date"
+              id="birthDate"
+              value={formData.birthDate}
+              onChange={handleInputChange}
               className="bg-custom-dark border border-custom-border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-center"
               required
             />

@@ -50,7 +50,7 @@ module.exports={
                 if (req.body.password == StudentFromDB.password ) {
                     const StudentToken = jwt.sign({id: StudentFromDB._id}, SECRET)
                     console.log(`Student ID ${StudentFromDB._id} \nStudentToken : ${StudentToken} `);
-                    res.status(200).cookie("StudentToken", StudentToken, {httpOnly:true}).json({ message: "Student Logged in successfully !!" })
+                    res.status(200).cookie("StudentToken", StudentToken, {httpOnly:true}).json({ message: "Student Logged in successfully !!"})
                 } else {
                     res.status(400).json({ message: "PAssword incorrect" })
                 }

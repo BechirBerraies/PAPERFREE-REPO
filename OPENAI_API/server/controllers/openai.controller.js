@@ -32,6 +32,7 @@ module.exports={
                             1. "name_match": a boolean indicating if the name matches.
                             2. "surname_match": a boolean indicating if the surname matches.
                             3. "id_match": a boolean indicating if the id matches.
+                            4. "birthdate_match":a boolean indicating if the birthdate matches.
                             4. "accuracy": a percentage representing the overall accuracy of the comparison, considering potential OCR errors.
                             5. "notes": additional notes about the comparison and any potential ambiguities.`
                         },
