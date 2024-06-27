@@ -50,14 +50,14 @@ def preprocess_image(image_path):
     inverted_image = cv2.bitwise_not(image)
     inverted_path = "temp/invertedimage.png"
     cv2.imwrite(inverted_path, inverted_image)
-    display(inverted_path)
+    # display(inverted_path)
 
 
     # 2 GRAYED IMAGE 
     gray_image = cv2.cvtColor(inverted_image, cv2.COLOR_BGR2GRAY )
     gray_path = "temp/grayedimage.png"
     cv2.imwrite(gray_path,gray_image)
-    display(gray_path)
+    # display(gray_path)
 
 
     # # 3 BLURR IMAGE
@@ -90,7 +90,7 @@ def preprocess_image(image_path):
     no_noise = noiseRemoval(thresh)
     no_noisepath = "temp/no_noisepath.png"
     cv2.imwrite(no_noisepath,no_noise)
-    display(no_noisepath)
+    # display(no_noisepath)
 
 
 

@@ -6,8 +6,9 @@ import Nav from './Nav';
 function Process() {
 
   const [selectedFile, setSelectedFile] = useState(null);
-  const [imagePath, setImagePath] = useState(null);
-  const [arabicText,setArabicText]= useState()
+  const [imagePath, setImagePath] = useState("");
+  const [arabicText,setArabicText]= useState(null)
+  const [studentId, setStudentId] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
@@ -95,12 +96,17 @@ function Process() {
         CardNumber: formData.id,
         BirthDate: formData.birthDate,
         path: imagePath,
+        student: localStorage.getItem('StudentId')
+
       };
+      console.log(localStorage.getItem('StudentId'));
+      console.log("ERRORRR");
       const response = await axios.post("http://localhost:8000/createCard", cardData);
       console.log(response);
       alert("Successful submission");
     } catch (error) {
       console.error('Error creating card:', error);
+      console.log("ERRORRR");
     }
   };
 
@@ -113,12 +119,16 @@ function Process() {
   };
 
 
+
   return (
     <div className="h-screen w-screen bg-cover bg-center" style={{ backgroundImage: `url('../public/images/header.png')` }}>
       <Nav/>
       <div className="image-upload-container h-full flex items-center align-middle justify-center">
         <form onSubmit={sendRequestToChatGPT} className="max-w-sm mx-auto">
           <div className="mb-5">
+
+
+
             <input
               placeholder="Name"
               type="text"

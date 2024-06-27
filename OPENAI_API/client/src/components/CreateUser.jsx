@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+ 
 const CreateUser = () => {
 
 
@@ -32,6 +32,7 @@ const CreateUser = () => {
         axios.post('http://localhost:8000/Student/register', user, { withCredentials: true })
             .then(serverResponse => {
                 console.log(serverResponse);
+                
                 navigate('/process');
             })
             .catch(error => console.log(error),
@@ -44,8 +45,9 @@ const CreateUser = () => {
         e.preventDefault();
         axios.post('http://localhost:8000/Student/login', loguser, { withCredentials: true })
            .then(serverResponse => {
-                console.log(serverResponse);
-                
+                console.log(serverResponse.data.StudentId);
+                localStorage.setItem('StudentId', serverResponse.data.StudentId);
+                localStorage.setItem('token', 'Hello token');
                 navigate('/process');
             })
            .catch(error => console.log(error),

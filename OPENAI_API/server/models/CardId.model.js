@@ -1,38 +1,32 @@
 const mongoose = require('mongoose');
-const Student = require('./Student.model');
 
-CardIdSchema = new mongoose.Schema({
-   
+const CardIdSchema = new mongoose.Schema({
     Name: {
-        type : String ,
-        required:[true,"YOU MUST HAVE A NAME"]
+        type: String,
+        required: [true, "YOU MUST HAVE A NAME"]
     },
-    Surname :{
-        type : String ,
-        required:[true,"YOU MUST HAVE A NAME"]
+    Surname: {
+        type: String,
+        required: [true, "YOU MUST HAVE A SURNAME"]
     },
-    BirthDate:{
-        type : Date,
-        require:[true,"How old are you "]
+    BirthDate: {
+        type: Date,
+        required: [true, "Birthdate is required"]
     },
     path: {
         type: String,
-        required:[true]
+        required: [true, "Image path is required"]
     },
-    CardNumber:{
-        type:Date,
-        required:[true]
+    CardNumber: {
+        type: String,
+        required: [true, "Card number is required"]
     },
     student: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Student',
         required: true
     }
+}, { timestamps: true });
 
-
-
-},{ timestamps: true });
-
-
-const CardId = mongoose.model("CardId",CardIdSchema);
-module.exports= {CardId, CardIdSchema}
+const CardId = mongoose.model("CardId", CardIdSchema);
+module.exports = CardId;

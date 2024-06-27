@@ -22,6 +22,7 @@ require('./config/configs.mongoose')(DB)
 require('./routes/openai.routes')(app)
 require('./routes/upload.routes')(app)
 require('./routes/student.routes')(app)
+require('./routes/cardId.routes')(app)
 
 
 
