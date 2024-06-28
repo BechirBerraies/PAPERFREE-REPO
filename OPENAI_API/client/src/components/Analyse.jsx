@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import FinalNav from './FinalNav';
+import { Link } from 'react-router-dom';
 
-
-function Process() {
-
+function Analyse() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePath, setImagePath] = useState("");
-  const [arabicText,setArabicText]= useState(null)
-  const [studentId, setStudentId] = useState("");
+  const [arabicText, setArabicText] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     surname: "",
     id: "",
     birthDate: ""
   });
-
-
-
 
   const  handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -27,8 +22,8 @@ function Process() {
       alert('Please select a PNG or JPG image file.');
       return;
     }
-
-    // setSelectedFile(file);
+    setSelectedFile(file)
+    console.log(file);
     handleFileUpload(file);
   };
 
@@ -54,7 +49,7 @@ function Process() {
         console.log(response.data.imagePath);
         console.log(response.data);
         setArabicText(response.data.scriptOutput)
-        setSelectedFile(file)
+        
       } else {
         console.error('Error uploading image:', response.data);
         alert('Error uploading image. Please try again.');
@@ -74,9 +69,9 @@ function Process() {
 
     try {
       const response = await axios.post('http://localhost:8000/openaiIdCard', {
-        name: document.getElementById('name').value,
-        surname: document.getElementById('surname').value,
-        id: document.getElementById('id').value,
+        name: formData.name,
+        surname: formData.surname,
+        id: formData.id,
         arabicText: arabicText,
       });
       console.log(response.data);
@@ -85,9 +80,6 @@ function Process() {
       console.error('Error making the Chat GPT request:', error);
     }
   };
-
-
-
 
   const CreateCard = async () => {
     try {
@@ -98,7 +90,6 @@ function Process() {
         BirthDate: formData.birthDate,
         path: imagePath,
         student: localStorage.getItem('StudentId')
-
       };
       console.log(localStorage.getItem('StudentId'));
       console.log("ERRORRR");
@@ -119,80 +110,95 @@ function Process() {
     }));
   };
 
-
-
   return (
-    <div className="h-screen w-screen bg-cover bg-center" >
-      <FinalNav/>
+    <div className="h-screen w-screen bg-cover bg-center">
+      <FinalNav />
       <div className="image-upload-container h-full flex items-center align-middle justify-center">
-        <form onSubmit={sendRequestToChatGPT} className="max-w-sm mx-auto">
+        <form onSubmit={sendRequestToChatGPT} className="max-w-lg mx-auto p-4rounded-lg">
           <div className="mb-5">
-
-
-
             <input
-              placeholder="Name"
+              placeholder="الأسم"
               type="text"
               id="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="bg-custom-dark border border-custom-border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-center"
+              className="bg-[#D9D9D9] border border-red-600 rounded-lg block w-full p-2.5 text-black text-xl text-center placeholder-gray-400 placeholder:text-center focus:ring-2 focus:ring-[#057933] hover:scale-110 ease-in-out duration-300"
               required
             />
           </div>
           <div className="mb-5">
             <input
-              placeholder="Surname"
+              placeholder="اللقب"
               type="text"
               id="surname"
               value={formData.surname}
               onChange={handleInputChange}
-              className="bg-custom-dark border border-custom-border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-center"
+              className="bg-[#D9D9D9] border border-red-600 rounded-lg block w-full p-2.5 text-black text-xl text-center placeholder-gray-400 placeholder:text-center focus:ring-2 focus:ring-[#057933] hover:scale-110 ease-in-out duration-300"
               required
             />
           </div>
           <div className="mb-5">
             <input
-              placeholder="Id Number"
+              placeholder="رقم بطاقة التعريف الوطنية"
               type="text"
               id="id"
               value={formData.id}
               onChange={handleInputChange}
-              className="bg-custom-dark border border-custom-border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-center"
+              className="bg-[#D9D9D9] border border-red-600 rounded-lg block w-full p-2.5 text-black text-xl text-center placeholder-gray-400 placeholder:text-center focus:ring-2 focus:ring-[#057933] hover:scale-110 ease-in-out duration-300"
               required
             />
           </div>
           <div className="mb-5">
             <input
-              placeholder="Birthdate"
+              placeholder="تاريخ الميلاد"
               type="date"
               id="birthDate"
               value={formData.birthDate}
               onChange={handleInputChange}
-              className="bg-custom-dark border border-custom-border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 placeholder:text-center"
+              className="bg-[#D9D9D9] border border-red-600 rounded-lg block w-full p-2.5 text-black text-xl text-center placeholder-gray-400 placeholder:text-center focus:ring-2 focus:ring-[#057933] hover:scale-110 ease-in-out duration-300"
               required
             />
           </div>
-          <div>
+          <div className="flex flex-row items-center mb-5">
             <input
               type="file"
               accept="image/png,image/jpeg"
-              onInput={handleFileChange}
-              className="h-48 bg-slate-800 rounded-lg cursor-pointer"
+              onChange={handleFileChange}
+              id="custom-input"
+              hidden
             />
+            <label
+              htmlFor="custom-input"
+              className="block mr-4 py-2 px-4 rounded-md border-0 text-sm font-semibold bg-pink-50 text-pink-700 hover:bg-pink-100 cursor-pointer"
+            >
+              إختر ملف
+            </label>
+            <label className="text-sm text-slate-500 mr-3">
+              {selectedFile ? selectedFile.name : 'لم يتم اختيار ملف'}
+            </label>
           </div>
           <div className="mt-3 flex justify-center">
-            <button
-              type="submit"
-              className="text-white bg-gradient-button hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Submit
-            </button>
+            <div className="ml-4 mr-4">
+              <button
+                type="reset"
+                className="bg-gradient-to-b from-[#FED33D] to-[#F67C0B] rounded-lg text-black text-lg font-medium w-full sm:w-20 px-3 py-2 text-center hover:ease-in-out duration-500 hover:bg-opacity-50 hover:text-white hover:ring-zinc-300 hover:ring-2 hover:outline-none"
+              >
+                Submit
+              </button>
+            </div>
+
           </div>
         </form>
+        {imagePath && (
+          <img
+            src={imagePath}
+            alt="Uploaded Image"
+            className="max-w-80"
+          />
+        )}
       </div>
     </div>
   );
 }
 
-export default Process;
+export default Analyse;
