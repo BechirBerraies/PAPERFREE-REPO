@@ -35,7 +35,7 @@ module.exports={
             const newStudent = new Student(req.body);
             const savedStudent = await newStudent.save();
             const studentToken = jwt.sign({ id: savedStudent._id }, SECRET);
-            res.status(201).cookie("StudentToken", studentToken, { httpOnly: true }).json(savedStudent);
+            res.status(201).cookie("StudentToken", studentToken, { httpOnly: true }).json({savedStudent,StudentId:savedStudent._id});
         } catch (error) {
             res.status(400).json(error);
             console.log(error);

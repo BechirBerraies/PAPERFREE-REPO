@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+body{
+    background: rgb(8,62,47);
+    background: radial-gradient(circle, rgba(8,62,47,1) 0%, rgba(11,19,41,1) 100%);
+    background-position: center;
+    background-attachment: fixed ;
+   /*  animation:gradientAnimation 3s infinite ; */
+      /* cursor: url('./src/assets/icons8-select-cursor-16.png'), auto; */ 
+}
+

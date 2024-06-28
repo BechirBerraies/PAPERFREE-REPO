@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
  
 const CreateUser = () => {
 
@@ -52,7 +53,6 @@ const CreateUser = () => {
             })
            .catch(error => console.log(error),
             console.log("Tell me why tell me why ")
-            
         );
     };
 
