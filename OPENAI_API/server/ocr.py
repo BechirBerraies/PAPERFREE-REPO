@@ -2,7 +2,7 @@ from PIL import Image
 from bidi.algorithm import get_display
 import sys
 import os
-from methods import preprocess_image
+from methods import preprocess_image 
 from methods import perform_ocr
 from methods import display
 
@@ -21,10 +21,15 @@ def main():
     image_path = os.path.join(current_directory, path)
 
 
+    # image_path=r"C:\Users\Lenovo\Desktop\Code\PAPERFREE-REPO\OPENAI_API\server\uploads\nour.jpg"
+
     # Preprocess the image
     processed_image = preprocess_image(image_path)
     # Perform OCR
     ocr_result = perform_ocr(processed_image)
+
+    
+    
 
     
     print( ocr_result )

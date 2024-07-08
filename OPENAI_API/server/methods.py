@@ -11,7 +11,6 @@ import numpy as np
 
 
 
-
 def display(im_path):
     dpi = 80
     im_data = plt.imread(im_path)
@@ -60,22 +59,39 @@ def preprocess_image(image_path):
     # display(gray_path)
 
 
-    # # 3 BLURR IMAGE
-    # blur = cv2.GaussianBlur(gray_image,(7,7),0)
-    # blur_path = "temp/blurimage.png"
-    # cv2.imwrite(blur_path,blur)
-    # display(blur_path)
+    # 3 BLURR IMAGE
+    blur = cv2.GaussianBlur(gray_image,(3,13),0)
+    blur_path = "temp/blurimage.png"
+    cv2.imwrite(blur_path,blur)
 
     # 4 THRESH 
 
     
-    _, thresh = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    _, thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
-    # thresh = cv2.threshold(gray_path,0,255,cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
-    # tresh_path =  "temp/tresh.png"
-    # cv2.imwrite(tresh_path,thresh)
-    # display(tresh_path)
 
+    #KERNAL 
+
+    kernal = cv2.getStructuringElement(cv2.MORPH_RECT, (1,5))
+    cv2.imwrite("temp/index_kernal.png", kernal)
+
+    #DILATE 
+    dilate = cv2.dilate(thresh, kernal, iterations=1)
+    cv2.imwrite("temp/index_dilate.png", dilate)
+
+    #Contours 
+    cnts = cv2.findContours(dilate, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+    cnts = sorted(cnts, key=lambda x: cv2.boundingRect(x)[0])
+
+
+    for c in cnts:
+        
+        x, y, w, h = cv2.boundingRect(c)
+        if h > 20 and w > 20 and h< 200 and w <200:
+            cv2.rectangle(image, (x, y), (x+w, y+h), (36, 255, 12), 2)
+            cv2.imwrite("temp/index_bbox_new.png", image)
+    
     # NOISE REMOVAL 
     def noiseRemoval(image):
         kernel = np.ones((1,1), np.uint8)
@@ -114,9 +130,10 @@ def preprocess_image(image_path):
     processed_image_path = "temp/processed_image.png"
     cv2.imwrite(processed_image_path, deskewed_image)
 
+    
+
+    # display(boxed)
     return no_noisepath
-
-
 
 
 

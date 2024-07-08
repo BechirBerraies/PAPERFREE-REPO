@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import FinalNav from './FinalNav';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Analyse() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -13,6 +14,7 @@ function Analyse() {
     id: "",
     birthDate: ""
   });
+  const navigate = useNavigate();
 
   const  handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -72,10 +74,13 @@ function Analyse() {
         name: formData.name,
         surname: formData.surname,
         id: formData.id,
+        birthdate: formData.birthDate,
         arabicText: arabicText,
       });
       console.log(response.data);
-      await CreateCard();
+      localStorage.setItem('data', JSON.stringify(response.data));     
+     await CreateCard();
+      navigate('/result')
     } catch (error) {
       console.error('Error making the Chat GPT request:', error);
     }
@@ -92,10 +97,8 @@ function Analyse() {
         student: localStorage.getItem('StudentId')
       };
       console.log(localStorage.getItem('StudentId'));
-      console.log("ERRORRR");
       const response = await axios.post("http://localhost:8000/createCard", cardData);
       console.log(response);
-      alert("Successful submission");
     } catch (error) {
       console.error('Error creating card:', error);
       console.log("ERRORRR");
@@ -180,7 +183,7 @@ function Analyse() {
           <div className="mt-3 flex justify-center">
             <div className="ml-4 mr-4">
               <button
-                type="reset"
+                type="submit"
                 className="bg-gradient-to-b from-[#FED33D] to-[#F67C0B] rounded-lg text-black text-lg font-medium w-full sm:w-20 px-3 py-2 text-center hover:ease-in-out duration-500 hover:bg-opacity-50 hover:text-white hover:ring-zinc-300 hover:ring-2 hover:outline-none"
               >
                 Submit

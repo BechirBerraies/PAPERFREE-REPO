@@ -31,7 +31,7 @@ function Home() {
         console.log(serverResponse);
         console.log(serverResponse.data.StudentId);
         localStorage.setItem('StudentId', serverResponse.data.StudentId);
-        navigate('/process');
+        navigate('/analyse');
       })
       .catch(error => console.log(error));
   };
@@ -43,7 +43,7 @@ function Home() {
         console.log(serverResponse.data.StudentId);
         localStorage.setItem('StudentId', serverResponse.data.StudentId);
         localStorage.setItem('token', 'Hello token');
-        navigate('/process');
+        navigate('/analyse');
       })
       .catch(error => console.log(error));
   };
