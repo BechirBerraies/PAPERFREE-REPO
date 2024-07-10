@@ -8,8 +8,6 @@ from methods import display
 
 
 
-
-
 def main():
     
     sys.stdout.reconfigure(encoding='utf-8')
