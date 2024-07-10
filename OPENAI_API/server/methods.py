@@ -4,8 +4,8 @@ from PIL import Image
 import pytesseract
 import cv2
 import numpy as np
-import arabic_reshaper # type: ignore
-from bidi.algorithm import get_display # type: ignore
+import arabic_reshaper 
+from bidi.algorithm import get_display 
 import numpy as np
 
 

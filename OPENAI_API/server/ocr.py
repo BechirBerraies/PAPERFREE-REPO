@@ -1,5 +1,5 @@
 from PIL import Image
-from bidi.algorithm import get_display # type: ignore
+from bidi.algorithm import get_display 
 import sys
 import os
 from methods import preprocess_image 
