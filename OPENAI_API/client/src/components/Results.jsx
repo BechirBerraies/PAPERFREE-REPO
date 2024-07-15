@@ -1,17 +1,25 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence, easeInOut } from "framer-motion";
 
 import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { XCircleIcon } from "@heroicons/react/24/solid";
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/solid";
+import { XMarkIcon } from "@heroicons/react/16/solid";
 import IconResult from "./IconResult";
+import { spread } from "axios";
 
 function Results() {
 
-  let storedData = localStorage.getItem('data');
-  let dataObject = storedData ? JSON.parse(storedData) : null;
-  console.log(dataObject.accuracy);
-  const [progressCIN, setProgressCIN] = useState(dataObject.accuracy); // Set the initial progress value for CIN
+
+let storedData = localStorage.getItem('data');
+
+let dataObject = storedData ? JSON.parse(storedData) : null;
+
+console.log(dataObject.accuracy);
+
+  const [progressCIN, setProgressCIN] =  useState(dataObject.accuracy); // Set the initial progress value for CIN
   const [progressPass, setProgressPass] = useState(50); // Set the initial progress value for Passeport
   const [progressCert, setProgressCert] = useState(20); // Set the initial progress value for Certificat de residance
 
@@ -54,6 +62,26 @@ function Results() {
     useIsVisible(
       ref3
     ); /*for horizontal line animation (<hr> tag) because it fades in to 50% opacity only */
+
+  // code for Handeling Popup window functionality and click outside to close event
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const popupRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        setIsPopupVisible(false); // Step 3: Check if the click is outside the popup
+      }
+    }
+
+    // Step 2: Add a click event listener to the document
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Step 4: Cleanup
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div>
       <header ref={ref2} className=" h-24">
@@ -94,6 +122,53 @@ function Results() {
       ease-in-out duration-700 ${isVisible1 ? "translate-x-0" : "translate-y-4"} `}
       >
         <div className="flex flex-col items-center w-80">
+          <AnimatePresence>
+            {isPopupVisible && (
+              <motion.div
+                initial={{ scale: 0.1, borderColor: "#0000" }}
+                animate={{
+                  scale: 1,
+                  transition: {
+                    scale: {
+                      type: "spring",
+                      duration: 0.8,
+                    },
+                  },
+                }}
+                exit={{
+                  scale: 0.1,
+                  opacity: 0,
+                  transition: { duration: 0.4 },
+                }}
+                whileInView={{
+                  borderStyle: "solid",
+                  borderColor: "#FED33D",
+                  borderWidth: "2px",
+                  borderRadius: 4,
+
+                  transition: {
+                    borderColor: {
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                      duration: 2,
+                      ease: "easeIn",
+                    },
+                  },
+                }}
+                ref={popupRef}
+                className="absolute z-10 top-96 h-[220px] w-[400px] 
+                  flex flex-col
+           bg-black bg-opacity-35 text-white text-center"
+              >
+                <motion.button onClick={() => setIsPopupVisible(false)}>
+                  <XMarkIcon className="absolute w-8 text-red-600 right-2 top-1" />
+                </motion.button>
+                <br />
+                <p>{dataObject.notes}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           <div className="h-44 w-full mb-3 border-2 border-gray-100 text-white text-center">
             CIN animation placeholder
           </div>
@@ -119,17 +194,26 @@ function Results() {
                 },
               }}
             ></motion.div>
-     
           </div>
           <div
-            className="text-white text-center mt-1
+            className="text-white text-center mt-1 mb-4
           "
           >
             تواقف بنسبة {progressCIN} %
           </div>
-          <div className="relative flex items-center">
+          <motion.div
+            className="relative flex items-center"
+            initial={{
+              y: 0,
+            }}
+            whileHover={{
+              y: -2,
+              boxShadow:
+                "rgba(0, 0, 0, 0.25) 0px 4px 5px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
+            }}
+          >
             <ChatBubbleLeftEllipsisIcon className="w-6 h-6 text-black absolute ml-3s mr-2 pointer-events-none" />
-            <button
+            <motion.button
               type="submit"
               className="
                 bg-gradient-to-b from-[#FED33D] from-15% to-[#F67C0B]
@@ -137,15 +221,14 @@ function Results() {
                 text-black text-lg 
                 text-center
                 font-semibold
-                pl-2 pr-9 py-2 mt-2 mb-2
-
+                pl-2 pr-9 py-2
                 hover:ease-in-out duration-500
-                hover:
                 "
+              onClick={() => setIsPopupVisible(true)}
             >
-              <Link to="/">التفاصيل</Link>
-            </button>
-          </div>
+              <Link to="">التفاصيل</Link>
+            </motion.button>
+          </motion.div>
           {/* <CheckCircleIcon className="text-green-500 inline-block mr-2 w-10 h-10 " /> */}
           <IconResult progress={progressCIN} />
         </div>
