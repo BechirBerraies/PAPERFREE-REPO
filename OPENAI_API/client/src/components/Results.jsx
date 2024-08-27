@@ -3,12 +3,11 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence, easeInOut } from "framer-motion";
 
 import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/solid";
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import { XCircleIcon } from "@heroicons/react/24/solid";
+
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/16/solid";
 import IconResult from "./IconResult";
-import { spread } from "axios";
+
 
 function Results() {
 
@@ -16,6 +15,9 @@ function Results() {
 let storedData = localStorage.getItem('data');
 
 let dataObject = storedData ? JSON.parse(storedData) : null;
+
+let image = localStorage.getItem('image');
+
 
 console.log(dataObject.accuracy);
 
@@ -169,8 +171,9 @@ console.log(dataObject.accuracy);
             )}
           </AnimatePresence>
 
-          <div className="h-44 w-full mb-3 border-2 border-gray-100 text-white text-center">
-            CIN animation placeholder
+          <div className=" w-full mb-3 border-2 border-gray-100 text-white text-center">
+            
+            <img src={image} alt="" />
           </div>
 
           <div
@@ -199,7 +202,7 @@ console.log(dataObject.accuracy);
             className="text-white text-center mt-1 mb-4
           "
           >
-            تواقف بنسبة {progressCIN} %
+            تواقف بنسبة {progressCIN} 
           </div>
           <motion.div
             className="relative flex items-center"

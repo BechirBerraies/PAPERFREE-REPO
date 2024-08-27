@@ -111,7 +111,7 @@ function Home() {
             </div>
             <div
               className="
-              relative mb-5 text-gray-400 focus-within:text-orange-400 ease-in-out duration-300
+              relative mb-5 text-gray-400 focus-within:text-orange-400 
                          hover:scale-110 ease-in-out duration-300"
             >
             <UserIcon className="w-7 h-7 mt-1.5 mr-2 absolute pointer-events-none " />
@@ -134,7 +134,7 @@ function Home() {
             </div>
             <div
               className="
-              relative mb-5 text-gray-400 focus-within:text-orange-400 ease-in-out duration-300
+              relative mb-5 text-gray-400 focus-within:text-orange-400 
               hover:scale-110 ease-in-out duration-300"
             >
               <UserIcon className="w-7 h-7 mt-1.5 mr-2 absolute pointer-events-none " />
@@ -159,7 +159,7 @@ function Home() {
             </div>
             <div className="
               relative mb-5 text-gray-400 focus-within:text-orange-400 ease-in-out duration-300
-                      hover:scale-110 ease-in-out duration-300"
+                      hover:scale-110 "
             >
               <EnvelopeIcon className="w-7 h-7 mt-1.5 mr-2 absolute pointer-events-none " />
               <input
@@ -182,7 +182,7 @@ function Home() {
             </div>
             <div className="
               relative mb-5 text-gray-400 focus-within:text-orange-400 ease-in-out duration-300
-                    hover:scale-110 ease-in-out duration-300"
+                    hover:scale-110 "
             >
               <LockClosedIcon className="w-7 h-7 mt-1.5 mr-2 absolute pointer-events-none " />
               <input
@@ -206,7 +206,7 @@ function Home() {
             </div>
             <div className="
               relative mb-5 text-gray-400 focus-within:text-orange-400 ease-in-out duration-300
-            hover:scale-110 ease-in-out duration-300"
+            hover:scale-110 "
             >
               <LockClosedIcon className="w-7 h-7 mt-1.5 mr-2 absolute pointer-events-none " />
               <input
@@ -282,7 +282,7 @@ function Home() {
             </div>
             <div className="
               relative mb-5 text-gray-400 focus-within:text-orange-400 ease-in-out duration-300
-              hover:scale-110 ease-in-out duration-300">
+              hover:scale-110 ">
               <EnvelopeIcon className="w-7 h-7 mt-1.5 mr-2 absolute pointer-events-none " />
               <input
                 type="text"
@@ -304,7 +304,7 @@ function Home() {
             </div>
             <div className="
               relative mb-5 text-gray-400 focus-within:text-orange-400 ease-in-out duration-300
-           hover:scale-110 ease-in-out duration-300">
+           hover:scale-110 ">
             <LockClosedIcon className="w-7 h-7 mt-1.5 mr-2 absolute pointer-events-none " />
               <input
                 type="password"

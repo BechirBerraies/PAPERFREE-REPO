@@ -23,6 +23,7 @@ function Analyse() {
   const  handleFileChange = (event) => {
     const file = event.target.files[0];
 
+
     const acceptedTypes = ['image/png', 'image/jpeg','image/jpg'];
     if (!acceptedTypes.includes(file.type)) {
       alert('Please select a PNG or JPG image file.');
@@ -100,6 +101,7 @@ function Analyse() {
         path: imagePath,
         student: localStorage.getItem('StudentId')
       };
+      localStorage.setItem('image', imagePath);
       console.log(localStorage.getItem('StudentId'));
       const response = await axios.post("http://localhost:8000/createCard", cardData);
       console.log(response);
